@@ -5,12 +5,14 @@
  */
 
 
-import ObjectClass.Car;
-import ObjectClass.User;
+
+import Entity.Users;
+import entity.Cars;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
@@ -28,8 +30,8 @@ public class CustomerBean implements Serializable {
     
     @EJB
     private CustomerEJB customerEJB;
-    private User user = new User();
-    private Car car = new Car();
+    private Users user = new Users();
+    private Cars car = new Cars();
     private int activePoint;
     public int getActivePoint() {
         return activePoint;
@@ -39,11 +41,11 @@ public class CustomerBean implements Serializable {
         this.activePoint = activePoint;
     }
 
-    public Car getCar() {
+    public Cars getCar() {
         return car;
     }
 
-    public void setCar(Car car) {
+    public void setCar(Cars car) {
         this.car = car;
     }
    
@@ -57,16 +59,17 @@ public class CustomerBean implements Serializable {
         this.customerEJB = customerEJB;
     }
 
-    public User getUser() {
+    public Users getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Users user) {
         this.user = user;
     }
+    
     public String sessUser()
     {
-        customerEJB.validateUserLogin(user.getLogin(),user.getPassword());
+       
         this.user=customerEJB.validateUserLogin(user.getLogin(),user.getPassword());
         
         if(this.user.getID()==-1)
@@ -84,16 +87,22 @@ public class CustomerBean implements Serializable {
         this.activePoint=point;
         return "insert?faces-redirect=true";
     }
-    
-    public void loadXML() throws  IOException
+  
+       public void loadXML() throws  IOException
     {
+        
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
+        
         ec.responseReset();
+        ec.getSession(true);
         ec.setResponseContentType("text/xml");
         ec.setResponseHeader ("Content-Disposition", "attachment;filename = result.xml"); 
+        
         OutputStream out = ec.getResponseOutputStream();
+        
         try{
+            System.out.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         JAXBContext context=JAXBContext.newInstance(User.class);
         Marshaller marsh=context.createMarshaller();
         marsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

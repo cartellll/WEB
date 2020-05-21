@@ -3,11 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ObjectClass;
+package Entity;
+
+
 import java.io.*;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
 //import com.fasterxml.jackson.databind;
 
@@ -18,22 +32,47 @@ import javax.xml.bind.annotation.*;
  * @author baran
  */
 
+@Entity
+@Table(name = "CARS")
 @XmlRootElement(name = "User")
 @XmlAccessorType (XmlAccessType.FIELD)
-public class Car implements Serializable, Comparable<Car> {
-   private int ID;
-   private String model;
-   private String manufacturer;
-   private int quantity;
-   private int cost;
-   private int point=0;
+
+
+@NamedQueries({
+    @NamedQuery(name = "Cars.findAll", query = "SELECT c FROM Cars c")
+    })
    
-   public Car()
+public class Cars implements Serializable, Comparable<Cars> {
+   
+   @Id
+   @NotNull
+   @Column(name = "ID") 
+   private int ID;
+   
+   @Size(max = 100)
+   @Column(name = "MODEL")
+   private String model;
+   
+   @Size(max = 100)
+   @Column(name = "MANUFACTURER")
+   private String manufacturer;
+   
+   @Column(name = "QUANTITY")
+   private int quantity;
+   
+   @Column(name = "COST")
+   private int cost;
+   
+   @JoinColumn(name = "POINT", referencedColumnName = "ID")
+   @ManyToOne
+   private Points point;
+   
+   public Cars()
    { 
        
    }
    
-   public Car(int ID,String model,String manufacturer,int quantity,int cost)
+   public Cars(int ID,String model,String manufacturer,int quantity,int cost)
    {
        
        
@@ -42,7 +81,7 @@ public class Car implements Serializable, Comparable<Car> {
        setManufacturer(manufacturer);
        setQuantity(quantity);
        setCost(cost);
-       this.point=0;
+       
      
    }
    
@@ -56,7 +95,7 @@ if (obj == null || obj.getClass() != this.getClass()) {
             return false;
 }
 
-Car guest=(Car) obj;
+Cars guest=(Cars) obj;
 
 return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) && this.model.equals(guest.model)&&this.quantity==guest.quantity;
                
@@ -71,7 +110,7 @@ return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) &
 		return result;
 	}
    
-   public int compareTo(Car car){
+   public int compareTo(Cars car){
      
        if(this.cost>car.cost)
             return 1;
@@ -144,7 +183,7 @@ return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) &
        this.cost=cost;
    }
        
-       public static void outputObject(Car car,PrintWriter pW)
+       public static void outputObject(Cars car,PrintWriter pW)
        {
           pW.println(car.ID);
           pW.println(car.model);
@@ -154,7 +193,7 @@ return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) &
           pW.println(car.point);
        }
        
-       public static Car inputObject(BufferedReader br)
+       public static Cars inputObject(BufferedReader br)
        {
         
         String model=null;
@@ -176,7 +215,7 @@ return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) &
                System.out.print("Ошибка при чтении из файла");
            }
           
-         return new Car(ID,model,manufacturer,quantity,cost);   
+         return new Cars(ID,model,manufacturer,quantity,cost);   
         
        }
          
@@ -190,12 +229,12 @@ return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) &
              this.ID=ID;
           }
    
-   public int getPoint()
+   public Points getPoint()
    {
        return this.point;
    }
   
-    public void setPoint(int point)
+    public void setPoint(Points point)
    {
        this.point=point;
    }

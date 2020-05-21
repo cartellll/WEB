@@ -141,7 +141,7 @@ public class Database {
 	statement.setString(3, car.getManufacturer());
         statement.setInt(4,car.getQuantity());
         statement.setInt(5,car.getCost());
-        statement.setInt(6,car.getPoint().getID());
+        statement.setInt(6,car.getPoint());
         statement.executeUpdate();
         }
         catch(SQLException exp)

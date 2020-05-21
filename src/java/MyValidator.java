@@ -30,8 +30,8 @@ import javax.naming.NamingException;
 @SessionScoped
 public class MyValidator implements Validator{
     
-    @EJB
-    CustomerEJB customerEJB;
+  @EJB
+  CustomerEJB customerEJB;
     private Pattern pattern;
     
 

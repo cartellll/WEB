@@ -21,16 +21,13 @@ import javax.xml.bind.annotation.*;
  */
 @XmlRootElement(name = "User")
 @XmlAccessorType (XmlAccessType.FIELD)
-public class Point implements Serializable {
+public class OldPoint implements Serializable {
     private int ID;
     private ArrayList <Car> cars=new ArrayList();
    
     
-    public Point()
-    {
-        
-    }
-    public Point(int ID)
+   
+    public OldPoint(int ID)
     {
        setID(ID);
     }

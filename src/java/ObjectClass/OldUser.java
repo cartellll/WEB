@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.*;
  */
 @XmlRootElement(name="User")
 
-public class User {
+public class OldUser {
     private int ID;
     private String name;
     private String login;

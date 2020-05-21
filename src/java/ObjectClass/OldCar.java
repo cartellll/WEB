@@ -13,14 +13,10 @@ import javax.xml.bind.annotation.*;
 
 
 
-/**
- *
- * @author baran
- */
 
 @XmlRootElement(name = "User")
 @XmlAccessorType (XmlAccessType.FIELD)
-public class Car implements Serializable, Comparable<Car> {
+public class OldCar implements Serializable, Comparable<OldCar> {
    private int ID;
    private String model;
    private String manufacturer;
@@ -28,12 +24,12 @@ public class Car implements Serializable, Comparable<Car> {
    private int cost;
    private int point=0;
    
-   public Car()
+   public OldCar()
    { 
        
    }
    
-   public Car(int ID,String model,String manufacturer,int quantity,int cost)
+   public OldCar(int ID,String model,String manufacturer,int quantity,int cost)
    {
        
        
@@ -56,7 +52,7 @@ if (obj == null || obj.getClass() != this.getClass()) {
             return false;
 }
 
-Car guest=(Car) obj;
+OldCar guest=(OldCar) obj;
 
 return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) && this.model.equals(guest.model)&&this.quantity==guest.quantity;
                
@@ -71,7 +67,7 @@ return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) &
 		return result;
 	}
    
-   public int compareTo(Car car){
+   public int compareTo(OldCar car){
      
        if(this.cost>car.cost)
             return 1;
@@ -144,7 +140,7 @@ return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) &
        this.cost=cost;
    }
        
-       public static void outputObject(Car car,PrintWriter pW)
+       public static void outputObject(OldCar car,PrintWriter pW)
        {
           pW.println(car.ID);
           pW.println(car.model);
@@ -154,7 +150,7 @@ return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) &
           pW.println(car.point);
        }
        
-       public static Car inputObject(BufferedReader br)
+       public static OldCar inputObject(BufferedReader br)
        {
         
         String model=null;
@@ -176,7 +172,7 @@ return this.cost == guest.cost && this.manufacturer.equals(guest.manufacturer) &
                System.out.print("Ошибка при чтении из файла");
            }
           
-         return new Car(ID,model,manufacturer,quantity,cost);   
+         return new OldCar(ID,model,manufacturer,quantity,cost);   
         
        }
          

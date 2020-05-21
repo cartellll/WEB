@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ObjectClass;
+package Entity;
 
 
 import java.io.FileNotFoundException;
@@ -11,26 +11,53 @@ import java.io.*;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.TreeSet;
+import java.util.List;
 import java.io.IOException;
 import java.util.*;
 import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.*;
 /**
  *
  * @author baran
  */
+
+@Entity
+@Table(name = "POINTS")
 @XmlRootElement(name = "User")
 @XmlAccessorType (XmlAccessType.FIELD)
-public class Point implements Serializable {
-    private int ID;
-    private ArrayList <Car> cars=new ArrayList();
-   
+
+@NamedQueries({
+    @NamedQuery(name = "Point.findAll", query = "SELECT p FROM Point p")
+    , @NamedQuery(name = "Point.findById", query = "SELECT p FROM Point p WHERE p.ID = :ID")})
+
+public class Points implements Serializable {
     
-    public Point()
+    @Id
+    @NotNull
+    @Column(name = "ID")
+    private int ID;
+    
+    @OneToMany(mappedBy = "point")
+    private List <Cars> cars;
+   
+    @ManyToMany(mappedBy = "points")
+    private List<Users> users;
+    
+    public Points()
     {
         
     }
-    public Point(int ID)
+    public Points(int ID)
     {
        setID(ID);
     }
@@ -41,15 +68,15 @@ public class Point implements Serializable {
         return cars.size();
     }
     
-    public void addElement(int i, Car car )
+    public void addElement(int i, Cars car )
     {
       cars.add(i, car);
-       car.setPoint(this.ID);
+      car.setPoint(this);
     }
     
     public void removeElment(int i)
     {
-        cars.get(i).setPoint(0);
+        cars.get(i).setPoint(null);
         cars.remove(i);
     }
     
@@ -57,7 +84,7 @@ public class Point implements Serializable {
    {
        
        try{
-      Set<Car> set = new LinkedHashSet<Car>(cars);
+      Set<Cars> set = new LinkedHashSet<Cars>(cars);
       cars.clear();
       cars.addAll(set);
          
@@ -69,7 +96,7 @@ public class Point implements Serializable {
        }
    }
    
-   public Car getElement(int i)
+   public Cars getElement(int i)
    {
        try{
       return cars.get(i);
@@ -90,7 +117,7 @@ public class Point implements Serializable {
         Pw = new PrintWriter(Name);
         Pw.println(this.cars.size());
         for (int i = 0; i < cars.size(); i++) {
-            Car.outputObject(cars.get(i), Pw);
+            Cars.outputObject(cars.get(i), Pw);
         }
         }
         catch(FileNotFoundException exp)
@@ -111,7 +138,7 @@ public class Point implements Serializable {
             int size=Integer.parseInt(br.readLine());
      
             for (int i = 0; i < size; i++) {
-               this.addElement(i,Car.inputObject(br));
+               this.addElement(i,Cars.inputObject(br));
             }
            }
            catch(FileNotFoundException exp)
@@ -141,14 +168,23 @@ public class Point implements Serializable {
            return this.ID;
        }
        
-     public void setCars( ArrayList <Car> cars)
+     public void setCars( List <Cars> cars)
      {
         this.cars=cars;
      }
      
-      public  ArrayList <Car> getCars()
+      public  List <Cars> getCars()
      {
         return cars;
      }
+      
+     
+    public List<Users> getUsersList() {
+        return users;
+    }
+
+    public void setUsersList(List<Users> users) {
+        this.users = users;
+    }
        
 }

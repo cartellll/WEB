@@ -5,10 +5,11 @@
  */
 
 
-import ObjectClass.Car;
-import ObjectClass.Point;
-import ObjectClass.User;
+
+import Entity.Users;
 import auto.Database;
+import entity.Cars;
+import entity.Points;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
@@ -24,16 +25,19 @@ public class CustomerEJB {
     @PersistenceContext(unitName="web5PU")
     private EntityManager em;
     
-    public User validateUserLogin(String login, String password)
+    public Users validateUserLogin(String login, String password)
     {
-        User user = new User();
+        Users user = new Users();
         try
         {
-            user = (User) em.createNamedQuery("User.findByLoginPassword").setParameter("login",login).setParameter("password",password).getSingleResult();
+            user = (Users) em.createNamedQuery("User.findByLoginPassword").setParameter("login",login).setParameter("password",password).getSingleResult();
+              
             return user;
         }  
         catch(NoResultException exp)
         {
+            user.setLogin(login);
+            user.setPassword(password);
             user.setID(-1);
         }
        
@@ -41,12 +45,12 @@ public class CustomerEJB {
     
     }
     
-    public void addCar(Car car, int activePoint)
+    public void addCar(Cars car, int activePoint)
     {
     
      em.persist(car);
-     car.setPoint(em.find(Point.class, activePoint));
-     em.find(Point.class, activePoint).addElement(activePoint, car);
+     car.setPoint(em.find(Points.class, activePoint));
+     em.find(Points.class, activePoint).addElement(activePoint, car);
     
      
     }
@@ -54,7 +58,7 @@ public class CustomerEJB {
     public String getCarsString()
     {
      String EMAIL_PATTERN = "";
-     List<Car>list = em.createNamedQuery("Car.findAll").getResultList();
+     List<Cars>list = em.createNamedQuery("Car.findAll").getResultList();
      for(int i=0;i<list.size();i++)
         {
             EMAIL_PATTERN+=String.valueOf(list.get(i).getID());
